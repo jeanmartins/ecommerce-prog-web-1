@@ -1,0 +1,43 @@
+.sidebar {
+    background: var(--blue);
+    width: 100vm;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px 36px;
+}
+
+.logo {
+    height: 3rem;
+}
+
+.actions-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.actions-nav a {
+    margin-left: 12px;
+}
+
+.actions-nav span {
+    font-weight: 500;
+}
+
+.button-nav {
+    border-radius: 8px;
+    padding: 12px 24px;
+}
+
+.button-nav.primary {
+    background: var(--yellow);
+    color: var(--black-purple);
+}
+
+.button-nav.secondary {
+    outline: 2px solid #fff;
+    color: #fff;
+}
