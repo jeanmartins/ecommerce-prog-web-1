@@ -1,0 +1,80 @@
+.section-form form {
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+}
+
+.section-form h1 {
+    color: var(--blue);
+    font-size: 2.0rem;
+    margin: 48px 0;
+}
+
+/* labels */
+.label-input {
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.label-input label {
+    color: var(--black-purple);
+}
+
+.label-input .required {
+    color: var(--red);
+    margin-left: 4px;
+}
+
+/* inputs */
+.div-inputs input {
+    background: var(--white);
+    color: var(--black-purple);
+
+    border: 1px solid var(--gray-4);
+    border-radius: 8px;
+
+    padding: 16px;
+    margin-bottom: 20px;
+
+    width: 350px;
+}
+
+.div-inputs input:hover {
+    border-color: var(--blue);
+}
+
+/* buttons */
+.div-buttons {
+    align-items: center;
+}
+
+.div-buttons button.yellow {
+    background: var(--yellow);
+    color: var(--black-purple);
+    font-weight: 500;
+
+    border: 0;
+    border-radius: 8px;
+    
+    margin-top: 12px;
+    padding: 18px 0;
+
+    width: 350px;
+}
+
+.div-buttons button.yellow:hover {
+    background: var(--yellow-hover);
+    cursor: pointer;
+}
+
+.div-buttons a {
+    color: var(--blue);
+    font-weight: 500;
+
+    margin-top: 24px;
+}
+
+.div-buttons a:hover {
+    color: var(--blue-hover);
+    cursor: pointer;
+}

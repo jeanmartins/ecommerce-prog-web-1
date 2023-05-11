@@ -40,3 +40,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.div-column {
+  display: flex;
+  flex-direction: column;
+}
