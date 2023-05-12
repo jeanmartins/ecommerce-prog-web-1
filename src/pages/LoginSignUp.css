@@ -1,3 +1,4 @@
+/* form */
 .section-form form {
     display: flex;
     align-items: center;
@@ -8,39 +9,6 @@
     color: var(--blue);
     font-size: 2.0rem;
     margin: 48px 0;
-}
-
-/* labels */
-.label-input {
-    margin-bottom: 12px;
-    font-weight: 500;
-}
-
-.label-input label {
-    color: var(--black-purple);
-}
-
-.label-input .required {
-    color: var(--red);
-    margin-left: 4px;
-}
-
-/* inputs */
-.div-inputs input {
-    background: var(--white);
-    color: var(--black-purple);
-
-    border: 1px solid var(--gray-4);
-    border-radius: 8px;
-
-    padding: 16px;
-    margin-bottom: 20px;
-
-    width: 350px;
-}
-
-.div-inputs input:hover {
-    border-color: var(--blue);
 }
 
 /* buttons */

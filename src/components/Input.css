@@ -1,0 +1,32 @@
+/* labels */
+.label-form {
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.label-form label {
+    color: var(--black-purple);
+}
+
+.label-form .required {
+    color: var(--red);
+    margin-left: 4px;
+}
+
+/* inputs */
+.input-form {
+    background: var(--white);
+    color: var(--black-purple);
+
+    border: 1px solid var(--gray-4);
+    border-radius: 8px;
+
+    padding: 16px;
+    margin-bottom: 20px;
+
+    width: 350px;
+}
+
+.input-form:hover {
+    border-color: var(--blue);
+}

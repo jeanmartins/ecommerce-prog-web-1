@@ -5,11 +5,18 @@ import { Input } from "../components/Input";
 
 import './LoginSignUp.css';
 
-export function Login() {
+export function SignUp() {
     return (
         <section className="section-form div-column">
             <form onSubmit={() =>{}}>
-                <h1>Faça Login</h1>
+                <h1>Crie sua conta</h1>
+
+                <Input 
+                    id="name"
+                    type="text"
+                    label="Nome"
+                    placeholder="Ex: Alissa"
+                />
                 
                 <Input 
                     id="email"
@@ -26,8 +33,8 @@ export function Login() {
                 />
 
                 <div className="div-buttons div-column">
-                    <button className="yellow" type="submit">Entrar</button>
-                    <Link to="/cadastro">Não tenho conta</Link>
+                    <button className="yellow" type="submit">Criar minha conta</button>
+                    <Link to="/login">Já tenho conta</Link>
                 </div>
             </form>
         </section>

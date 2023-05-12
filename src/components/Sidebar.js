@@ -25,6 +25,7 @@ export function Sidebar() {
                     <ShoppingCart 
                         color="#FFF"
                         size={24}
+                        className="cart"
                     />
                 </NavLink>
             </div>

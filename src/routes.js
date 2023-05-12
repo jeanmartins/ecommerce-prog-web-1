@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Default } from './pages/Default';
 import { Login } from './pages/Login';
-
+import { SignUp } from './pages/SignUp';
 
 export const router = createBrowserRouter([
     {
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/cadastro',
-                element: <>cadastro</>
+                element: <SignUp />
             },
             {
                 path: '/carrinho',

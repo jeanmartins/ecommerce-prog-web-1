@@ -27,6 +27,11 @@
     font-weight: 500;
 }
 
+/* REVER ESSE COMPORTAMENTO */
+.actions-nav .cart:hover {
+    color: var(--yellow);
+}
+
 .button-nav {
     border-radius: 8px;
     padding: 12px 24px;
@@ -37,7 +42,18 @@
     color: var(--black-purple);
 }
 
+.button-nav.primary:hover {
+    background: var(--yellow-hover);
+    cursor: pointer;
+}
+
 .button-nav.secondary {
-    outline: 2px solid #fff;
+    outline: 1px solid #fff;
     color: #fff;
+}
+
+.button-nav.secondary:hover {
+    outline-color: var(--yellow);
+    color: var(--yellow);
+    cursor: pointer;
 }
