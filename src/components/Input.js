@@ -10,7 +10,7 @@ export function Input(props) {
 
             <input 
                 {...props}
-                className="input-form"
+                className={props.disabled ? "input-form diseblad" : "input-form"}
             />
         </div>
     )
