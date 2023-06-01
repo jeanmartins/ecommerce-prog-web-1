@@ -1,7 +1,7 @@
 import { Input } from "../components/Input";
 import "./LoginSignUp.css";
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import api from "../services/api";
 
 export function Login() {
@@ -34,7 +34,7 @@ export function Login() {
   };
 
   if (loginState.loggedIn) {
-    return <Redirect to={`/profile/${encodeURIComponent(loginState.email)}`} />;
+    return <Navigate to={`/profile/${encodeURIComponent(loginState.email)}`} />;
   }
 
   return (
