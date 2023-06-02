@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../components/Input";
 import api from "../services/api";
 import './LoginSignUp.css';
+import "bootstrap/dist/css/bootstrap.min.css"; // Importa o arquivo CSS do Bootstrap
 
 export function SignUp() {
     const [nome, setNome] = useState("");
@@ -38,11 +39,13 @@ export function SignUp() {
             }else{
 
                 setErrorMessage("Ocorreu um erro ao criar a conta.");
+                setTimeout(() => {
+                    setErrorMessage("");
+                    }, 3000);
             }
         } catch (error) {
           setErrorMessage("Ocorreu um erro ao criar a conta.");
           setTimeout(() => {
-            // Limpa a mensagem de sucesso
             setErrorMessage("");
             }, 3000);
           console.error("Error on create:", error.response.errorMessage);
@@ -51,6 +54,16 @@ export function SignUp() {
 
     return (
         <section className="section-form div-column">
+                        {successMessage && (
+                <div className="alert alert-success mt-3 text-center" role="alert">
+                {successMessage}
+                </div>
+            )}
+            {errorMessage && (
+                <div className="alert alert-danger mt-3 text-center" role="alert">
+                {errorMessage}
+                </div>
+            )}
             <form onSubmit={handleSubmit}>
                 <h1>Crie sua conta</h1>
 
@@ -95,8 +108,7 @@ export function SignUp() {
                     <Link to="/login">Já tenho conta</Link>
                 </div>
             </form>
-            {successMessage && <p className="success-message">{successMessage}</p>}
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
         </section>
     );
 }
