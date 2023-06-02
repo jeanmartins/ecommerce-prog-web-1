@@ -1,14 +1,14 @@
 import { Input } from "../components/Input";
 import "./LoginSignUp.css";
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 export function Login() {
   const [email, setEmail] = useState("");
-  const [loginState, setLoginState] = useState({ loggedIn: false, email: "" });
+  const [loginState, setLoginState] = useState({ loggedIn: false});
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,22 +19,23 @@ export function Login() {
       });
 
       if (response.data.errorMessage != null) {
+        setEmail("");
+        setPassword("");
         return console.error("Error logging in:", response.data.errorMessage);
       }
 
       console.log("User logged in successfully:", response.data);
       sessionStorage.setItem("jwt", response.data.token);
-      setLoginState({ loggedIn: true, email: response.data.email });
+      sessionStorage.setItem("email", email)
+      setLoginState({ loggedIn: true});
 
-      setEmail("");
-      setPassword("");
     } catch (error) {
       console.error("Error logging in:", error.response.data);
     }
   };
 
   if (loginState.loggedIn) {
-    return <Navigate to={`/profile/${encodeURIComponent(loginState.email)}`} />;
+    return navigate('/profile/');
   }
 
   return (

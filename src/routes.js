@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
                 element: <>carrinho</>
             },
             {
-                path: '/profile/:idUser',
+                path: '/profile/',
                 element: <Profile />
             },
         ],
