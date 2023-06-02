@@ -62,7 +62,7 @@ export function Profile () {
 
              setErrorMessage("Ocorreu um erro ao atualizar o usuário.");  
         } catch (error) {
-          console.error("Error logging in:", error.response.data);
+          console.error("Error on Update:", error.response.errorMessage);
         }
       };
 
