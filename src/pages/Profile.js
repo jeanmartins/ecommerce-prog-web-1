@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect  } from "react";
+import { useNavigate  } from "react-router-dom";
 import { Input } from "../components/Input";
 import { User, ShoppingBag, SignOut} from "phosphor-react";
-
+import api from "../services/api";
 import './Profile.css';
+import "bootstrap/dist/css/bootstrap.min.css"; // Importa o arquivo CSS do Bootstrap
 
-const user = {
-    id: '123',
-    tipo: 'admin',
-    nome: 'Alissa Fernandes',
-    email: 'alissa.fernandes@gmail.com',
-    senha: "senha",
-    endereco: 'Rua das Capivaras, 233, Bairro Lagoinha - Caruaru, PE'
-}
+
 
 export function Profile () {
     const [status, setStatus] = useState("minha-conta");
     const [pedidos, setPedidos] = useState([]);
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [senha, setSenha] = useState('');
+    const [admin, setAdmin] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleSetConta = () => setStatus("minha-conta");
     const handleSetPedidos = () => setStatus("meus-pedidos");
@@ -43,17 +45,83 @@ export function Profile () {
             produto: 'Ração Golden Special para Cães Adultos Sabor Frango e Carne - 20kg',
             total: 'R$149,90',
         }
+        
     ]);
 
-    useEffect(() => {
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+            const response = await api.post(`/ap1/v1/user/updateUser`,{
+                nome: nome,
+                endereco: endereco,
+                email: email,
+                senha: senha
+        });
+            if(response.data.errorMessage === null){
+                setSuccessMessage("Usuário atualizado.");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                    window.location.reload();
+                    }, 1200);  
+      
+            }else{
+                setErrorMessage("Ocorreu um erro ao atualizar o usuário.");
+                setTimeout(() => {
+                   setErrorMessage("");
+                   }, 3000);
+            }
+        } catch (error) {
+          console.error("Error on Update:", error.response.errorMessage);
+        }
+      };
+
+      const logOff = () => {
+       sessionStorage.clear();
+       navigate('/');
+      
+      }
+      const deleteAccount = async () => {
+        const response = await api.delete(`/ap1/v1/user/deleteUser`, {
+            data: { email: email }
+
+        });
+        if(response.data === true){
+            setSuccessMessage("Usuário deletado com sucesso!");
+            setTimeout(() => {
+                setSuccessMessage("");
+                sessionStorage.clear();
+                navigate('/');
+                }, 3000);  
+        }else
+        {
+        setErrorMessage("Ocorreu um erro ao excluir conta.");  
+        setTimeout(() => {
+            setErrorMessage("");
+            }, 3000)
+        }
+       }
+      useEffect(() => {
+        async function getProfile() {
+            let email = sessionStorage.getItem("email")
+            const response = await api.get(`/ap1/v1/user/getProfile/${email}`);
+            setNome(response.data.nome);
+            setEmail(response.data.email);
+            setEndereco(response.data.endereco);
+            setSenha(response.data.senha);
+            setAdmin(response.data.admin);
+        }
+        getProfile();
         getMeusPedidos();
-    }, []);
+      }, []); 
 
     return (
         <section className="section-profile div-column">
+            
             <div className="div-row">
-                <h1>{user.nome}</h1>
-                {user.tipo === 'admin' ? <span className="admin">admin</span> : <></>}
+                <h1>{nome ?? ''}</h1>
+                {admin === true ? <span className="admin">admin</span> : <></>}
             </div>
 
             <div className="section-content">
@@ -67,7 +135,7 @@ export function Profile () {
                         <span>Minha conta</span>
                     </button>
 
-                    {user.tipo === 'cliente' ? 
+                    {admin === false ? 
                         <button 
                             className="item-menu"
                             id={status === "meus-pedidos" ? "selected" : null}
@@ -83,7 +151,7 @@ export function Profile () {
                     <button 
                         className="item-menu"
                         id="sair"
-                        onClick={() => {}}
+                        onClick={() => {logOff()}}
                     >
                         <SignOut color="#404040" size={20}/>
                         <span>Sair</span>
@@ -91,8 +159,19 @@ export function Profile () {
                 </div>
             
                 <div className="group-options">
+                    
                     {status === "minha-conta" ?
                         <div className="minha-conta">
+                        {successMessage && (
+                            <div className="alert alert-success mt-3 text-center fixed-top" role="alert">
+                            {successMessage}
+                            </div>
+                        )}
+                        {errorMessage && (
+                        <div className="alert alert-danger mt-3 text-center fixed-top" role="alert">
+                        {errorMessage}
+                        </div>
+                        )}
                             {/* VER CONTA */}
                             <h3>Minha conta</h3>
                             <hr/>
@@ -100,15 +179,15 @@ export function Profile () {
                             <div className="dados div-column">
                                 <label>
                                     <span>Nome:</span>
-                                    {user.nome}
+                                    {nome}
                                 </label>
                                 <label>
                                     <span>Email:</span>
-                                    {user.email}
+                                    {email}
                                 </label>
                                 <label>
                                     <span>Endereço:</span>
-                                    {user.endereco}
+                                    {endereco ?? ''}
                                 </label>
                             </div>
 
@@ -116,13 +195,16 @@ export function Profile () {
                             <h3>Editar conta</h3>
                             <hr/>
 
-                            <form className="group-inputs div-column">
+                            <form className="group-inputs div-column" onSubmit={handleSubmit}>
+                                {/* Se houver uma mensagem de erro, exibir o alerta */}
+                                {errorMessage && <div className="error-message">{errorMessage}</div>}
                                 <Input 
                                     id="nome"
                                     type="text"
                                     label="Nome"
                                     placeholder="Ex: Alissa Fernandes"
-                                    value={user.nome}
+                                    value={nome ?? ''}
+                                    onChange={(e) => setNome(e.target.value)}
                                 />
 
                                 <Input 
@@ -130,7 +212,8 @@ export function Profile () {
                                     type="email"
                                     label="Email"
                                     placeholder="Ex: alifernandes@gmail.com"
-                                    value={user.email}
+                                    value={email ?? ''}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     disabled
                                 />
 
@@ -139,7 +222,8 @@ export function Profile () {
                                     type="text"
                                     label="Endereço"
                                     placeholder="Ex: Rua 2, Diamantina"
-                                    value={user.endereco}
+                                    value={endereco ?? ''}
+                                    onChange={(e) => setEndereco(e.target.value)}
                                 />
 
                                 <Input 
@@ -147,12 +231,13 @@ export function Profile () {
                                     type="password"
                                     label="Senha"
                                     placeholder="Não escreva 123"
-                                    value={user.senha}
+                                    value={senha ?? ''}
+                                    onChange={(e) => setSenha(e.target.value)}
                                 />
 
                                 <button 
                                     className="yellow"
-                                    onSubmit={() => {}}
+                                    type="submit"
                                 >
                                     Salvar alterações
                                 </button>
@@ -170,7 +255,7 @@ export function Profile () {
 
                                 <button 
                                     className="danger"
-                                    onClick={() => {}}
+                                    onClick={() => {deleteAccount()}}
                                 >
                                     Excluir conta
                                 </button>
