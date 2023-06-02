@@ -3,11 +3,15 @@ import "./LoginSignUp.css";
 import React, { useState } from "react";
 import { Link,  useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "bootstrap/dist/css/bootstrap.min.css"; // Importa o arquivo CSS do Bootstrap
+
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [loginState, setLoginState] = useState({ loggedIn: false});
   const [password, setPassword] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,25 +25,48 @@ export function Login() {
       if (response.data.errorMessage != null) {
         setEmail("");
         setPassword("");
+        setErrorMessage("Usuário ou senha inválido.");  
+        setTimeout(() => {
+            setErrorMessage("");
+            }, 3000);  
         return console.error("Error logging in:", response.data.errorMessage);
       }
 
       console.log("User logged in successfully:", response.data);
+      setSuccessMessage("Usuário logado com sucesso!");
       sessionStorage.setItem("jwt", response.data.token);
       sessionStorage.setItem("email", email)
       setLoginState({ loggedIn: true});
 
     } catch (error) {
+      setErrorMessage("Usuário ou senha inválido.");  
+      setTimeout(() => {
+          setErrorMessage("");
+          }, 3000);  
       console.error("Error logging in:", error.response.data);
     }
   };
 
   if (loginState.loggedIn) {
-    return navigate('/profile/');
+    setTimeout(() => {
+      setSuccessMessage("");
+      navigate('/profile/');
+      }, 2000);  
   }
 
   return (
+    
     <section className="section-form div-column">
+        {successMessage && (
+                            <div className="alert alert-success mt-3 text-center fixed-top" role="alert">
+                            {successMessage}
+                            </div>
+                        )}
+                        {errorMessage && (
+                        <div className="alert alert-danger mt-3 text-center fixed-top" role="alert">
+                        {errorMessage}
+                        </div>
+                        )}
       <form onSubmit={handleSubmit}>
         <h1>Faça Login</h1>
 

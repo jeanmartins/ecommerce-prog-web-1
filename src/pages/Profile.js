@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { User, ShoppingBag, SignOut} from "phosphor-react";
 import api from "../services/api";
 import './Profile.css';
+import "bootstrap/dist/css/bootstrap.min.css"; // Importa o arquivo CSS do Bootstrap
 
 
 
@@ -15,7 +16,8 @@ export function Profile () {
     const [endereco, setEndereco] = useState('');
     const [senha, setSenha] = useState('');
     const [admin, setAdmin] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     const handleSetConta = () => setStatus("minha-conta");
@@ -57,10 +59,19 @@ export function Profile () {
                 email: email,
                 senha: senha
         });
-            if(response.data.errorMessage == null)
-                window.location.reload();
-
-             setErrorMessage("Ocorreu um erro ao atualizar o usuário.");  
+            if(response.data.errorMessage === null){
+                setSuccessMessage("Usuário atualizado.");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                    window.location.reload();
+                    }, 1200);  
+      
+            }else{
+                setErrorMessage("Ocorreu um erro ao atualizar o usuário.");
+                setTimeout(() => {
+                   setErrorMessage("");
+                   }, 3000);
+            }
         } catch (error) {
           console.error("Error on Update:", error.response.errorMessage);
         }
@@ -71,6 +82,26 @@ export function Profile () {
        navigate('/');
       
       }
+      const deleteAccount = async () => {
+        const response = await api.delete(`/ap1/v1/user/deleteUser`, {
+            data: { email: email }
+
+        });
+        if(response.data === true){
+            setSuccessMessage("Usuário deletado com sucesso!");
+            setTimeout(() => {
+                setSuccessMessage("");
+                sessionStorage.clear();
+                navigate('/');
+                }, 3000);  
+        }else
+        {
+        setErrorMessage("Ocorreu um erro ao excluir conta.");  
+        setTimeout(() => {
+            setErrorMessage("");
+            }, 3000)
+        }
+       }
       useEffect(() => {
         async function getProfile() {
             let email = sessionStorage.getItem("email")
@@ -87,6 +118,7 @@ export function Profile () {
 
     return (
         <section className="section-profile div-column">
+            
             <div className="div-row">
                 <h1>{nome ?? ''}</h1>
                 {admin === true ? <span className="admin">admin</span> : <></>}
@@ -127,8 +159,19 @@ export function Profile () {
                 </div>
             
                 <div className="group-options">
+                    
                     {status === "minha-conta" ?
                         <div className="minha-conta">
+                        {successMessage && (
+                            <div className="alert alert-success mt-3 text-center fixed-top" role="alert">
+                            {successMessage}
+                            </div>
+                        )}
+                        {errorMessage && (
+                        <div className="alert alert-danger mt-3 text-center fixed-top" role="alert">
+                        {errorMessage}
+                        </div>
+                        )}
                             {/* VER CONTA */}
                             <h3>Minha conta</h3>
                             <hr/>
@@ -212,7 +255,7 @@ export function Profile () {
 
                                 <button 
                                     className="danger"
-                                    onClick={() => {}}
+                                    onClick={() => {deleteAccount()}}
                                 >
                                     Excluir conta
                                 </button>
