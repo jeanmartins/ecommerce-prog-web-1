@@ -1,12 +1,13 @@
 import React, { useState, useEffect  } from "react";
 import { useNavigate  } from "react-router-dom";
+
 import { Input } from "../components/Input";
 import { User, ShoppingBag, SignOut} from "phosphor-react";
+
 import api from "../services/api";
+
 import './Profile.css';
-import "bootstrap/dist/css/bootstrap.min.css"; // Importa o arquivo CSS do Bootstrap
-
-
+import "bootstrap/dist/css/bootstrap.min.css"; 
 
 export function Profile () {
     const [status, setStatus] = useState("minha-conta");
@@ -18,6 +19,7 @@ export function Profile () {
     const [admin, setAdmin] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
     const navigate = useNavigate();
 
     const handleSetConta = () => setStatus("minha-conta");
@@ -48,7 +50,6 @@ export function Profile () {
         
     ]);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -58,51 +59,52 @@ export function Profile () {
                 endereco: endereco,
                 email: email,
                 senha: senha
-        });
+            });
+
             if(response.data.errorMessage === null){
                 setSuccessMessage("Usuário atualizado.");
                 setTimeout(() => {
                     setSuccessMessage("");
                     window.location.reload();
-                    }, 1200);  
+                }, 1200);  
       
-            }else{
+            } else {
                 setErrorMessage("Ocorreu um erro ao atualizar o usuário.");
                 setTimeout(() => {
                    setErrorMessage("");
-                   }, 3000);
+                }, 3000);
             }
         } catch (error) {
           console.error("Error on Update:", error.response.errorMessage);
         }
-      };
+    };
 
-      const logOff = () => {
-       sessionStorage.clear();
-       navigate('/');
-      
-      }
-      const deleteAccount = async () => {
+    const logOff = () => {
+        sessionStorage.clear();
+        navigate('/');
+    }
+
+    const deleteAccount = async () => {
         const response = await api.delete(`/ap1/v1/user/deleteUser`, {
             data: { email: email }
-
         });
+
         if(response.data === true){
             setSuccessMessage("Usuário deletado com sucesso!");
             setTimeout(() => {
                 setSuccessMessage("");
                 sessionStorage.clear();
                 navigate('/');
-                }, 3000);  
-        }else
-        {
-        setErrorMessage("Ocorreu um erro ao excluir conta.");  
-        setTimeout(() => {
-            setErrorMessage("");
+            }, 3000);  
+        } else {
+            setErrorMessage("Ocorreu um erro ao excluir conta.");  
+            setTimeout(() => {
+                setErrorMessage("");
             }, 3000)
         }
-       }
-      useEffect(() => {
+    }
+
+    useEffect(() => {
         async function getProfile() {
             let email = sessionStorage.getItem("email")
             const response = await api.get(`/ap1/v1/user/getProfile/${email}`);
@@ -112,9 +114,10 @@ export function Profile () {
             setSenha(response.data.senha);
             setAdmin(response.data.admin);
         }
+
         getProfile();
         getMeusPedidos();
-      }, []); 
+    }, []); 
 
     return (
         <section className="section-profile div-column">
@@ -159,19 +162,19 @@ export function Profile () {
                 </div>
             
                 <div className="group-options">
-                    
                     {status === "minha-conta" ?
                         <div className="minha-conta">
-                        {successMessage && (
-                            <div className="alert alert-success mt-3 text-center fixed-top" role="alert">
-                            {successMessage}
-                            </div>
-                        )}
-                        {errorMessage && (
-                        <div className="alert alert-danger mt-3 text-center fixed-top" role="alert">
-                        {errorMessage}
-                        </div>
-                        )}
+                            {successMessage && (
+                                <div className="alert alert-success mt-3 text-center fixed-top" role="alert">
+                                    {successMessage}
+                                </div>
+                            )}
+                            {errorMessage && (
+                                <div className="alert alert-danger mt-3 text-center fixed-top" role="alert">
+                                    {errorMessage}
+                                </div>
+                            )}
+
                             {/* VER CONTA */}
                             <h3>Minha conta</h3>
                             <hr/>
@@ -187,7 +190,7 @@ export function Profile () {
                                 </label>
                                 <label>
                                     <span>Endereço:</span>
-                                    {endereco ?? ''}
+                                    {endereco ?? 'Endereço não cadastrado'}
                                 </label>
                             </div>
 
@@ -198,6 +201,7 @@ export function Profile () {
                             <form className="group-inputs div-column" onSubmit={handleSubmit}>
                                 {/* Se houver uma mensagem de erro, exibir o alerta */}
                                 {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                
                                 <Input 
                                     id="nome"
                                     type="text"
