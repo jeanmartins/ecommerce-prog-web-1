@@ -57,3 +57,7 @@
     color: var(--yellow);
     cursor: pointer;
 }
+
+.Islogged {
+    margin-left: 8px;
+}
