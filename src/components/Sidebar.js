@@ -1,18 +1,27 @@
 import { NavLink } from "react-router-dom";
-
+import React, { useState } from "react";
+import api from "../services/api";
 import { ShoppingCart, User } from 'phosphor-react';
 import logo from '../assets/logo.svg';
 
 import './Sidebar.css';
 
-const user = {
-    tipo: 'admin',
-    id: '123'
-}
-
-const isLogged = false;
 
 export function Sidebar() {
+    const [admin, setAdmin] = useState(false);
+    const [isLogged, setisLogged] = useState(false);
+
+    let email = sessionStorage.getItem("email");
+
+    if(email !== "" && email != null && email !== undefined){
+        async function getProfile() {
+            const response = await api.get(`/ap1/v1/user/getProfile/${email}`);
+            response != null ? setisLogged(true) : setisLogged(false);
+            setAdmin(response.data.admin);
+        }
+        getProfile();
+    }
+
     return(
         <nav className="sidebar"> 
         <NavLink to="/">
@@ -21,7 +30,7 @@ export function Sidebar() {
 
         {isLogged ?
             <div className="actions-nav">
-                {user.tipo !== 'admin' ?
+                {admin ?
                     <NavLink to="/carrinho">
                         <ShoppingCart 
                             color="#FFF"

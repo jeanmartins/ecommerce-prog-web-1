@@ -4,11 +4,7 @@ import React, { useState } from "react";
 import api from "../services/api";
 import './Default.css';
 import { HomeAdmin } from "./HomeAdmin";
-
-const user = {
-    tipo: 'cliente',
-    id: '123'
-}
+import { HomeCliente } from "./HomeCliente";
 
 
 export function Default() {
@@ -33,7 +29,7 @@ export function Default() {
                 {admin ? 
                     <HomeAdmin />
                 :
-                    <>cliente</>
+                    <HomeCliente />
                 }
             </div>
         </div>
