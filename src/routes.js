@@ -3,6 +3,7 @@ import { Default } from './pages/Default';
 import { Login } from './pages/Login';
 import { SignUp } from './pages/SignUp';
 import { Profile } from './pages/Profile';
+import { HomeAdmin } from './pages/HomeAdmin';
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
                 path: '/profile/:idUser',
                 element: <Profile />
             },
+            {
+                path: '/dashboard',
+                element: <HomeAdmin /> 
+            }
         ],
     }
 ])
