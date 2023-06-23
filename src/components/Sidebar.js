@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import { ShoppingCart, User } from 'phosphor-react';
 import logo from '../assets/logo.svg';
@@ -12,7 +12,7 @@ export function Sidebar() {
     const [isLogged, setisLogged] = useState(false);
 
     let email = sessionStorage.getItem("email");
-
+    
     if(email !== "" && email != null && email !== undefined){
         async function getProfile() {
             const response = await api.get(`/ap1/v1/user/getProfile/${email}`);
@@ -24,7 +24,7 @@ export function Sidebar() {
 
     return(
         <nav className="sidebar"> 
-        <NavLink to="/">
+        <NavLink to={admin ? "/dashboard" : "/paginaInicial"}>
             <img className="logo" src={logo} alt="logo" />
         </NavLink>
 
