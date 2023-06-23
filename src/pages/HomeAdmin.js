@@ -14,6 +14,25 @@ export function HomeAdmin() {
     const handleSetCompras = () => setStatus("compras");
     const handleSetRelatorios = () => setStatus("relatorios");
 
+    const handleSetAddProduto = () => setStatus("addProduto");
+    const handleSetAddCategoria = () => setStatus("addCategoria");
+
+    const handleSetEditProduto = () => {
+        // quero pegar o id do elemento clicado 
+        // passar as informações para "editar Produto" de acordo com o id
+        // só depois atualizar o status
+
+        setStatus("editProduto");
+    }
+
+    const handleSetEditCategoria = () => {
+        // quero pegar o id do elemento clicado 
+        // passar as informações para "editar Categoria" de acordo com o id
+        // só depois atualizar o status
+
+        setStatus("editCategoria");
+    }
+
     const getMeusProdutos = () => setMeusProdutos([
         {
             img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
@@ -84,7 +103,7 @@ export function HomeAdmin() {
                 <div className="group-btn">
                     <button 
                         className="item-menu"
-                        id={status === "produtos" ? "selected" : null}
+                        id={status === "produtos" | status === "addProduto" | status === "editProduto" ? "selected" : null}
                         onClick={handleSetProdutos}
                     >
                         Produtos
@@ -92,7 +111,7 @@ export function HomeAdmin() {
 
                     <button 
                         className="item-menu"
-                        id={status === "categorias" ? "selected" : null}
+                        id={status === "categorias" || status === "addCategoria" | status === "editCategoria" ? "selected" : null}
                         onClick={handleSetCategorias}
                     >
                         Categorias
@@ -118,8 +137,7 @@ export function HomeAdmin() {
                 {status === "produtos" && 
                     <button
                         className="btn-secondary"
-                        id="cta"
-                        onClick={() => {}}
+                        onClick={handleSetAddProduto}
                     >
                         Adicionar produto
                     </button>
@@ -128,8 +146,7 @@ export function HomeAdmin() {
                 {status === "categorias" && 
                     <button 
                         className="btn-secondary"
-                        id="cta"
-                        onClick={() => {}}
+                        onClick={handleSetAddCategoria}
                     >
                         Adicionar categoria
                     </button>
@@ -138,7 +155,6 @@ export function HomeAdmin() {
 
             <section className="section-content">
                 {status === "produtos" &&
-                <>
                     <div className="lista-produto div-column">
                         {meusProdutos.map(produto => (
                             <div className="item-produto">
@@ -165,7 +181,7 @@ export function HomeAdmin() {
                                     <button 
                                         className="secondary"
                                         id="cta"
-                                        onClick={() => {}}
+                                        onClick={handleSetEditProduto}
                                     >
                                         Editar
                                     </button>
@@ -180,68 +196,45 @@ export function HomeAdmin() {
                             </div>
                         ))}
                     </div>
+                }
 
-                    {/* Adicionar produto */}
-                    {/* <div className="add">
-                        <h3>Adicionar produto</h3>
-
-                        <div>
-                            <Input 
-                                id="nome"
-                                type="text"
-                                label="Nome"
-                                placeholder="Digite o nome da categoria"
-                            /> 
-                            
-                            <div className="div-inputs div-column">
-                                <div className="label-form">
-                                    <label for="descricao">Descrição</label>
-                                    <label className="required">*</label>
+                {status === "categorias" &&
+                    <div className="lista-categoria div-column">
+                        {minhasCategorias.map(categoria => (
+                            <div className="item-categoria">
+                                <div className="infos-categoria div-column">
+                                    <span className="tag">{categoria.nome}</span>
+                                    <div className="subcategorias"> 
+                                        <label>Subcategorias: </label>
+                                        {categoria.subcategoria.map(sub => (
+                                            <span className="tag sub">{sub}</span>
+                                        ))}
+                                    </div>
                                 </div>
-
-                                <textarea 
-                                    id="descricao"
-                                    name="descricao"
-                                    placeholder="Digite a descrição"
-                                    rows={5}
-                                /> 
+                                
+                                <div className="acoes">
+                                    <button 
+                                        className="secondary"
+                                        id="cta"
+                                        onClick={handleSetEditCategoria}
+                                    >
+                                        Editar
+                                    </button>
+                                    <button 
+                                        className="tertiary"
+                                        id="cta"
+                                        onClick={() => {}}
+                                    >
+                                        Excluir
+                                    </button>
+                                </div>
                             </div>
-                            
-                            <div className="numbers">
-                                <Input 
-                                    id="preco"
-                                    type="number"
-                                    label="Preço"
-                                    placeholder="Digite o preco"
-                                    step="0.01"
-                                />
-                                <Input 
-                                    id="estoque"
-                                    type="number"
-                                    label="Estoque"
-                                    placeholder="Digite a quantidade do estoque"
-                                />                  
-                            </div>
+                        ))}
+                    </div>
+                }
 
-                            <Input 
-                                id="categorias"
-                                type="text"
-                                label="Categorias"
-                                placeholder="Digite as categorias separadas por vírgulas"
-                            />               
-                        </div>
-
-                        <button
-                            className="btn-secondary"
-                            type="submit"
-                            onClick={() => {}}
-                        >
-                            Adicionar produto
-                        </button>
-                    </div>   */}
-
-                    {/* Editar produto */}
-                    {/* <div className="add">
+                {status === "editProduto" && 
+                    <div className="add">
                         <h3>Editar produto</h3>
 
                         <div>
@@ -302,76 +295,11 @@ export function HomeAdmin() {
                         >
                             Editar produto
                         </button>
-                    </div>   */}
-                </>
+                    </div> 
                 }
 
-                {status === "categorias" &&
-                <>
-                    <div className="lista-categoria div-column">
-                        {minhasCategorias.map(categoria => (
-                            <div className="item-categoria">
-                                <div className="infos-categoria div-column">
-                                    <span className="tag">{categoria.nome}</span>
-                                    <div className="subcategorias"> 
-                                        <label>Subcategorias: </label>
-                                        {categoria.subcategoria.map(sub => (
-                                            <span className="tag sub">{sub}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                                
-                                <div className="acoes">
-                                    <button 
-                                        className="secondary"
-                                        id="cta"
-                                        onClick={() => {}}
-                                    >
-                                        Editar
-                                    </button>
-                                    <button 
-                                        className="tertiary"
-                                        id="cta"
-                                        onClick={() => {}}
-                                    >
-                                        Excluir
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Adicionar categoria */}
-                    {/* <div className="add">
-                        <h3>Adicionar categoria</h3>
-
-                        <div>
-                            <Input 
-                                id="nome"
-                                type="text"
-                                label="Nome"
-                                placeholder="Digite o nome da categoria"
-                            />  
-
-                            <Input 
-                                id="subcategorias"
-                                type="text"
-                                label="Subcategorias"
-                                placeholder="Digite as subcategorias separadas por vírgulas"
-                            />               
-                        </div>
-
-                        <button
-                            className="btn-secondary"
-                            type="submit"
-                            onClick={() => {}}
-                        >
-                            Adicionar categoria
-                        </button>
-                    </div> */}
-
-                    {/* Editar categoria */}
-                    {/* <div className="add">
+                {status === "editCategoria" &&
+                    <div className="add">
                         <h3>Editar categoria</h3>
 
                         <div>
@@ -399,9 +327,98 @@ export function HomeAdmin() {
                         >
                             Editar categoria
                         </button>
-                    </div> */}
-                </>
+                    </div>
                 }
+
+                {status === "addProduto" && 
+                    <div className="add">
+                        <h3>Adicionar produto</h3>
+
+                        <div>
+                            <Input 
+                                id="nome"
+                                type="text"
+                                label="Nome"
+                                placeholder="Digite o nome da categoria"
+                            /> 
+                            
+                            <div className="div-inputs div-column">
+                                <div className="label-form">
+                                    <label for="descricao">Descrição</label>
+                                    <label className="required">*</label>
+                                </div>
+
+                                <textarea 
+                                    id="descricao"
+                                    name="descricao"
+                                    placeholder="Digite a descrição"
+                                    rows={5}
+                                /> 
+                            </div>
+                            
+                            <div className="numbers">
+                                <Input 
+                                    id="preco"
+                                    type="number"
+                                    label="Preço"
+                                    placeholder="Digite o preco"
+                                    step="0.01"
+                                />
+                                <Input 
+                                    id="estoque"
+                                    type="number"
+                                    label="Estoque"
+                                    placeholder="Digite a quantidade do estoque"
+                                />                  
+                            </div>
+
+                            <Input 
+                                id="categorias"
+                                type="text"
+                                label="Categorias"
+                                placeholder="Digite as categorias separadas por vírgulas"
+                            />               
+                        </div>
+
+                        <button
+                            className="btn-secondary"
+                            type="submit"
+                            onClick={() => {}}
+                        >
+                            Adicionar produto
+                        </button>
+                    </div>
+                }
+
+                {status === "addCategoria" && 
+                    <div className="add">
+                        <h3>Adicionar categoria</h3>
+
+                        <div>
+                            <Input 
+                                id="nome"
+                                type="text"
+                                label="Nome"
+                                placeholder="Digite o nome da categoria"
+                            />  
+
+                            <Input 
+                                id="subcategorias"
+                                type="text"
+                                label="Subcategorias"
+                                placeholder="Digite as subcategorias separadas por vírgulas"
+                            />               
+                        </div>
+
+                        <button
+                            className="btn-secondary"
+                            type="submit"
+                            onClick={() => {}}
+                        >
+                            Adicionar categoria
+                        </button>
+                    </div>
+                } 
 
                 {status === "compras" &&
                     <div>

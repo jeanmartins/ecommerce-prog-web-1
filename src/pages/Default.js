@@ -3,9 +3,6 @@ import { Sidebar } from "../components/Sidebar";
 import React, { useState } from "react";
 import api from "../services/api";
 import './Default.css';
-import { HomeAdmin } from "./HomeAdmin";
-import { HomeCliente } from "./HomeCliente";
-
 
 export function Default() {
     const [admin, setAdmin] = useState(false);
@@ -22,16 +19,8 @@ export function Default() {
     return (
         <div className="layout">
             <Sidebar/>
-
-            <div className="content">
-                <Outlet /> 
-
-                {admin ? 
-                    <HomeAdmin />
-                :
-                    <HomeCliente />
-                }
-            </div>
+            
+            <Outlet />
         </div>
     )
 }
