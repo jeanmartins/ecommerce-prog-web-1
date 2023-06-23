@@ -1,17 +1,28 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
-
+import React, { useState } from "react";
+import api from "../services/api";
 import './Default.css';
 import { HomeAdmin } from "./HomeAdmin";
 
 const user = {
-    tipo: 'admin',
+    tipo: 'cliente',
     id: '123'
 }
 
-const isLogged = true;
 
 export function Default() {
+    const [admin, setAdmin] = useState(false);
+
+    let email = sessionStorage.getItem("email");
+    if(email !== "" && email != null && email !== undefined){
+        async function getProfile() {
+            const response = await api.get(`/ap1/v1/user/getProfile/${email}`);
+            setAdmin(response.data.admin);
+        }
+        getProfile();
+    }
+
     return (
         <div className="layout">
             <Sidebar/>
@@ -19,7 +30,7 @@ export function Default() {
             <div className="content">
                 <Outlet /> 
 
-                {isLogged && user.tipo === 'admin' ? 
+                {admin ? 
                     <HomeAdmin />
                 :
                     <>cliente</>

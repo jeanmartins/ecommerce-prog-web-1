@@ -10,7 +10,7 @@ const user = {
     id: '123'
 }
 
-const isLogged = true;
+const isLogged = false;
 
 export function Sidebar() {
     return(
