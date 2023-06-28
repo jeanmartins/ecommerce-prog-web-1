@@ -8,7 +8,7 @@ export function HomeCliente() {
     const getMeusProdutos = () => {
 
         async function getProducts() {
-            const response = await api.get(`/ap1/v1/product/get`);
+            const response = await api.get(`/api/v1/product/get`);
             response.data.forEach(produto => { setMeusProdutos(prevProdutos => [...prevProdutos, produto])})
         }
         getProducts();

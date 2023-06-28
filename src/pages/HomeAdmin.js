@@ -1,91 +1,222 @@
 import React, { useEffect, useState } from "react";
-
+import api from "../services/api";
+import { Link,  useNavigate } from "react-router-dom";
 import { Input } from "../components/Input";
 
 import './HomeAdmin.css';
 
 export function HomeAdmin() {
+    const navigate = useNavigate();
     const [status, setStatus] = useState("produtos");
     const [meusProdutos, setMeusProdutos] = useState([]);
     const [minhasCategorias, setMinhasCategorias] = useState([]);
+    const [editProdutoForm, setEditProdutoForm] = useState({
+        id : 0,
+        descricao: '',
+        preco: 0,
+        quantidade: 0,
+        categoriaId: 0
+      });
+      const [addProdutoForm, setAddProdutoForm] = useState({
+        descricao: '',
+        preco: 0,
+        quantidade: 0,
+        categoriaId: 0
+      });
+      const [editCategoriaForm, setEditCategoriaForm] = useState({
+        id : 0,
+        descricao: '',
+      });
+      
+      const [addCategoriaForm, setAddCategoriaForm] = useState({
+        descricao: '',
+      });
 
     const handleSetProdutos = () => setStatus("produtos");
     const handleSetCategorias = () => setStatus("categorias");
-    const handleSetCompras = () => setStatus("compras");
-    const handleSetRelatorios = () => setStatus("relatorios");
+
 
     const handleSetAddProduto = () => setStatus("addProduto");
     const handleSetAddCategoria = () => setStatus("addCategoria");
 
-    const handleSetEditProduto = () => {
+    const handleSetEditProduto = (index) => {
         // quero pegar o id do elemento clicado 
         // passar as informações para "editar Produto" de acordo com o id
         // só depois atualizar o status
-
+        setEditProdutoForm(meusProdutos[index])
         setStatus("editProduto");
     }
 
-    const handleSetEditCategoria = () => {
+    const handleDeleteProduto = async (index) => {
+        // quero pegar o id do elemento clicado 
+        // passar as informações para "editar Produto" de acordo com o id
+        // só depois atualizar o status
+        let prod = meusProdutos[index]
+        try {
+
+            const response = await api.delete(`/api/v1/product/delete`, {
+                data: {
+                  id: prod.id
+                },
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+            if(response.data === true)
+              navigate('/dashboard')
+              window.location.reload();
+ 
+        
+          } catch (error) {
+            console.error('Erro ao editar o produto:', error);
+          }
+    }
+
+    const handleDeleteCategoria = async (index) => {
+        // quero pegar o id do elemento clicado 
+        // passar as informações para "editar Produto" de acordo com o id
+        // só depois atualizar o status
+        let cat = minhasCategorias[index]
+        try {
+
+            const response = await api.delete(`/api/v1/categoria/delete`, {
+                data: {
+                  id: cat.id
+                },
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+            if(response.data === true)
+              navigate('/dashboard')
+              window.location.reload();
+        
+          } catch (error) {
+            console.error('Erro ao editar o produto:', error);
+          }
+    }
+
+
+    const handleSetEditCategoria = (index) => {
         // quero pegar o id do elemento clicado 
         // passar as informações para "editar Categoria" de acordo com o id
         // só depois atualizar o status
-
+        setEditCategoriaForm(minhasCategorias[index]);
         setStatus("editCategoria");
     }
+    const getMeusProdutos = () => {
 
-    const getMeusProdutos = () => setMeusProdutos([
-        {
-            img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
-            nome: "Ração Golden Fórmula Mini Bits para Cães Adultos de Porte Pequeno Sabor Frango e Arroz",
-            descricao: `- Indicada para cães adultos; 
-- Redução do odor das fezes, seleção de ingredientes especiais que auxiliam na redução do odor das fezes;
-- Blend de proteínas, máxima satisfação para o paladar;
-- Maior rendimento, ingredientes de alto aproveitamento;
-- Saúde e vitalidade, alimento de alta qualidade, rico em vitaminas e minerais;`,
-            quantidade: 12,
-            preco: "149,90",
-            categorias: ["cachorro", "ração"],
-        },
-        {
-            img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
-            nome: "Ração Golden Fórmula Mini Bits para Cães Adultos de Porte Pequeno Sabor Frango e Arroz",
-            descricao: `- Indicada para cães adultos; 
-- Redução do odor das fezes, seleção de ingredientes especiais que auxiliam na redução do odor das fezes;
-- Blend de proteínas, máxima satisfação para o paladar;
-- Maior rendimento, ingredientes de alto aproveitamento;
-- Saúde e vitalidade, alimento de alta qualidade, rico em vitaminas e minerais;`,
-            quantidade: 12,
-            preco: "149,90",
-            categorias: ["cachorro", "ração"],
-        },
-        {
-            img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
-            nome: "Ração Golden Fórmula Mini Bits para Cães Adultos de Porte Pequeno Sabor Frango e Arroz",
-            descricao: `- Indicada para cães adultos; 
-- Redução do odor das fezes, seleção de ingredientes especiais que auxiliam na redução do odor das fezes;
-- Blend de proteínas, máxima satisfação para o paladar;
-- Maior rendimento, ingredientes de alto aproveitamento;
-- Saúde e vitalidade, alimento de alta qualidade, rico em vitaminas e minerais;`,
-            quantidade: 12,
-            preco: "149,90",
-            categorias: ["cachorro", "ração"],
-        },
-    ]);
-
-    const getMinhasCategorias = () => setMinhasCategorias([
-        {
-            nome: 'cachorro',
-            subcategoria: ['ração', 'higiene']
-        },
-        {
-            nome: 'cachorro',
-            subcategoria: ['ração', 'higiene']
-        },
-        {
-            nome: 'cachorro',
-            subcategoria: ['ração', 'higiene']
+        async function getProducts() {
+            const response = await api.get(`/api/v1/product/get`);
+         //   response.data.forEach(produto => { setMeusProdutos(prevProdutos => [...prevProdutos, produto])})
+         setMeusProdutos(response.data)
+            console.log(meusProdutos)
         }
-    ]);
+        getProducts();
+    }
+
+    const handleEditProdutoFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditProdutoForm(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      };
+
+      const handleAddProdutoFormChange = (e) => {
+        const { name, value } = e.target;
+        setAddProdutoForm(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      };
+
+      const handleAddCategoriaFormChange = (e) => {
+        const { name, value } = e.target;
+        setAddCategoriaForm(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      };
+
+
+      const handleEditCategoriaFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditCategoriaForm(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      };
+
+
+      
+
+      const handleEditProdutoSubmit = async () => {
+        try {
+          // Simulação de chamada à API
+          const response = await api.post(`/api/v1/product/update`, editProdutoForm);
+          if(response.data === true)
+            navigate('/dashboard')
+            window.location.reload();
+          // Lógica adicional aqui (redirecionamento, atualização de estado, etc.)
+      
+        } catch (error) {
+          console.error('Erro ao editar o produto:', error);
+        }
+      };
+
+      const handleAddProdutoSubmit = async () => {
+        try {
+          // Simulação de chamada à API
+          const response = await api.post(`/api/v1/product/create`, addProdutoForm);
+          if(response.data === true)
+            navigate('/dashboard')
+            window.location.reload();
+          // Lógica adicional aqui (redirecionamento, atualização de estado, etc.)
+      
+        } catch (error) {
+          console.error('Erro ao adicionar o produto:', error);
+        }
+      };
+
+      const handleAddCategoriaSubmit = async () => {
+        try {
+          // Simulação de chamada à API
+          const response = await api.post(`/api/v1/categoria/create`, addCategoriaForm);
+          if(response.data === true)
+            navigate('/dashboard')
+            window.location.reload();
+          // Lógica adicional aqui (redirecionamento, atualização de estado, etc.)
+      
+        } catch (error) {
+          console.error('Erro ao adicionar o produto:', error);
+        }
+      };
+      
+      
+      const handleEditCategoriaSubmit = async () => {
+        try {
+          // Simulação de chamada à API
+          const response = await api.post(`/api/v1/categoria/update`, editCategoriaForm);
+          if(response.data === true)
+            navigate('/dashboard')
+            window.location.reload();
+          // Lógica adicional aqui (redirecionamento, atualização de estado, etc.)
+      
+        } catch (error) {
+          console.error('Erro ao editar a categoria:', error);
+        }
+      };
+      
+
+    const getMinhasCategorias = () => {
+        async function getCategorias() {
+            const response = await api.get(`/api/v1/categoria/get`);
+         setMinhasCategorias(response.data)
+        }
+        getCategorias();
+    }
+
 
     useEffect(() => {
         getMeusProdutos();
@@ -117,21 +248,7 @@ export function HomeAdmin() {
                         Categorias
                     </button>
 
-                    <button 
-                        className="item-menu"
-                        id={status === "compras" ? "selected" : null}
-                        onClick={handleSetCompras}
-                    >
-                        Compras
-                    </button>
 
-                    <button 
-                        className="item-menu"
-                        id={status === "relatorios" ? "selected" : null}
-                        onClick={handleSetRelatorios}
-                    >
-                        Relatórios
-                    </button>
                 </div>
 
                 {status === "produtos" && 
@@ -154,21 +271,21 @@ export function HomeAdmin() {
             </div>
 
             <section className="section-content">
-                {status === "produtos" &&
+                {status === "produtos" && meusProdutos.length > 0 &&
                     <div className="lista-produto div-column">
-                        {meusProdutos.map(produto => (
-                            <div className="item-produto">
+                        {meusProdutos.map((produto, index) => (
+                            <div className="item-produto" key={index}>
                                 <div className="infos-produto">
-                                    <img src={produto.img} alt="Imagem produto"/>
+                                    <img src={produto.foto} alt="Imagem produto"/>
 
                                     <div className="dados">
                                         <div className="categorias">
-                                            {produto.categorias.map((categoria) => 
+                                            {/* {produto.categorias.map((categoria) => 
                                                 <span className="tag">{categoria}</span>
-                                            )}
+                                            )} */}
                                         </div>
                                         
-                                        <label>{produto.nome}</label>
+                                        <label>{produto.descricao}</label>
 
                                         <div>
                                             <span className="estoque">{produto.quantidade} unidades em estoque</span>
@@ -181,14 +298,14 @@ export function HomeAdmin() {
                                     <button 
                                         className="secondary"
                                         id="cta"
-                                        onClick={handleSetEditProduto}
+                                        onClick={ () => handleSetEditProduto(index)}
                                     >
                                         Editar
                                     </button>
                                     <button 
                                         className="tertiary"
                                         id="cta"
-                                        onClick={() => {}}
+                                        onClick={() => {handleDeleteProduto(index)}}
                                     >
                                         Excluir
                                     </button>
@@ -200,30 +317,24 @@ export function HomeAdmin() {
 
                 {status === "categorias" &&
                     <div className="lista-categoria div-column">
-                        {minhasCategorias.map(categoria => (
+                        {minhasCategorias.map((categoria,index) => (
                             <div className="item-categoria">
                                 <div className="infos-categoria div-column">
-                                    <span className="tag">{categoria.nome}</span>
-                                    <div className="subcategorias"> 
-                                        <label>Subcategorias: </label>
-                                        {categoria.subcategoria.map(sub => (
-                                            <span className="tag sub">{sub}</span>
-                                        ))}
-                                    </div>
+                                    <span className="tag">{categoria.descricao}</span>
                                 </div>
                                 
                                 <div className="acoes">
                                     <button 
                                         className="secondary"
                                         id="cta"
-                                        onClick={handleSetEditCategoria}
+                                        onClick={() => handleSetEditCategoria(index)}
                                     >
                                         Editar
                                     </button>
                                     <button 
                                         className="tertiary"
                                         id="cta"
-                                        onClick={() => {}}
+                                        onClick={() => {handleDeleteCategoria(index)}}
                                     >
                                         Excluir
                                     </button>
@@ -238,13 +349,6 @@ export function HomeAdmin() {
                         <h3>Editar produto</h3>
 
                         <div>
-                            <Input 
-                                id="nome"
-                                type="text"
-                                label="Nome"
-                                placeholder="Digite o nome da categoria"
-                                value={meusProdutos[0].nome}
-                            /> 
                             
                             <div className="div-inputs div-column">
                                 <div className="label-form">
@@ -257,7 +361,8 @@ export function HomeAdmin() {
                                     name="descricao"
                                     placeholder="Digite a descrição"
                                     rows={5}
-                                    value={meusProdutos[0].descricao}
+                                    value={editProdutoForm.descricao}
+                                    onChange={handleEditProdutoFormChange}
                                 /> 
                             </div>
                             
@@ -267,31 +372,38 @@ export function HomeAdmin() {
                                     type="number"
                                     label="Preço"
                                     placeholder="Digite o preco"
+                                    name="preco"
                                     step="0.01"
-                                    value={meusProdutos[0].preco}
+                                    value={editProdutoForm.preco}
+                                    onChange={handleEditProdutoFormChange}
                                 />
                                 <Input 
                                     id="estoque"
                                     type="number"
+                                    name="quantidade"
                                     label="Estoque"
                                     placeholder="Digite a quantidade do estoque"
-                                    value={meusProdutos[0].quantidade}
+                                    value={editProdutoForm.quantidade}
+                                    onChange={handleEditProdutoFormChange}
                                 />                  
                             </div>
 
                             <Input 
                                 id="categorias"
                                 type="text"
-                                label="Categorias"
-                                placeholder="Digite as categorias separadas por vírgulas"
-                                value={meusProdutos[0].categorias}
+                                name="categoriaId"
+                                label="Categoria"
+                                placeholder="Digite apenas uma categoria"
+                                max-length="1"
+                                value={editProdutoForm.categoriaId}
+                                onChange={handleEditProdutoFormChange}
                             />               
                         </div>
 
                         <button
                             className="btn-secondary"
                             type="submit"
-                            onClick={() => {}}
+                            onClick={() => {handleEditProdutoSubmit()}}
                         >
                             Editar produto
                         </button>
@@ -304,26 +416,21 @@ export function HomeAdmin() {
 
                         <div>
                             <Input 
-                                id="nome"
+                                id="descricao"
+                                name="descricao"
                                 type="text"
-                                label="Nome"
+                                label="Descrição"
                                 placeholder="Digite o nome da categoria"
-                                value={minhasCategorias[0].nome}
+                                value={editCategoriaForm.descricao}
+                                onChange={handleEditCategoriaFormChange}
                             />  
-
-                            <Input 
-                                id="subcategorias"
-                                type="text"
-                                label="Subcategorias"
-                                placeholder="Digite as subcategorias separadas por vírgulas"
-                                value={minhasCategorias[0].subcategoria}
-                            />               
+           
                         </div>
 
                         <button
                             className="btn-secondary"
                             type="submit"
-                            onClick={() => {}}
+                            onClick={() => {handleEditCategoriaSubmit()}}
                         >
                             Editar categoria
                         </button>
@@ -335,12 +442,7 @@ export function HomeAdmin() {
                         <h3>Adicionar produto</h3>
 
                         <div>
-                            <Input 
-                                id="nome"
-                                type="text"
-                                label="Nome"
-                                placeholder="Digite o nome da categoria"
-                            /> 
+ 
                             
                             <div className="div-inputs div-column">
                                 <div className="label-form">
@@ -353,6 +455,8 @@ export function HomeAdmin() {
                                     name="descricao"
                                     placeholder="Digite a descrição"
                                     rows={5}
+                                    value={addProdutoForm.descricao}
+                                    onChange={handleAddProdutoFormChange}
                                 /> 
                             </div>
                             
@@ -360,30 +464,41 @@ export function HomeAdmin() {
                                 <Input 
                                     id="preco"
                                     type="number"
+                                    name="preco"
                                     label="Preço"
                                     placeholder="Digite o preco"
                                     step="0.01"
+                                    value={addProdutoForm.preco}
+                                    onChange={handleAddProdutoFormChange}
+                                    
                                 />
                                 <Input 
                                     id="estoque"
                                     type="number"
+                                    name="quantidade"
                                     label="Estoque"
                                     placeholder="Digite a quantidade do estoque"
+                                    value={addProdutoForm.quantidade}
+                                    onChange={handleAddProdutoFormChange}
                                 />                  
                             </div>
 
                             <Input 
                                 id="categorias"
                                 type="text"
+                                max-length="1"
+                                name="categoriaId"
                                 label="Categorias"
-                                placeholder="Digite as categorias separadas por vírgulas"
+                                placeholder="Digite o Id da categoria"
+                                value={addProdutoForm.categoriaId}
+                                    onChange={handleAddProdutoFormChange}
                             />               
                         </div>
 
                         <button
                             className="btn-secondary"
                             type="submit"
-                            onClick={() => {}}
+                            onClick={() => {handleAddProdutoSubmit()}}
                         >
                             Adicionar produto
                         </button>
@@ -399,38 +514,23 @@ export function HomeAdmin() {
                                 id="nome"
                                 type="text"
                                 label="Nome"
+                                name="descricao"
                                 placeholder="Digite o nome da categoria"
+                                value={addCategoriaForm.descricao}
+                                onChange={handleAddCategoriaFormChange}
                             />  
-
-                            <Input 
-                                id="subcategorias"
-                                type="text"
-                                label="Subcategorias"
-                                placeholder="Digite as subcategorias separadas por vírgulas"
-                            />               
+            
                         </div>
 
                         <button
                             className="btn-secondary"
                             type="submit"
-                            onClick={() => {}}
+                            onClick={() => {handleAddCategoriaSubmit()}}
                         >
                             Adicionar categoria
                         </button>
                     </div>
                 } 
-
-                {status === "compras" &&
-                    <div>
-                        compras
-                    </div>
-                }
-
-                {status === "relatorios" &&
-                    <div>
-                        relatorios
-                    </div>
-                }
             </section>
         </section>
     );

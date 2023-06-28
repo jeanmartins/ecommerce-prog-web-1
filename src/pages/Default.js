@@ -3,8 +3,6 @@ import { Sidebar } from "../components/Sidebar";
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import './Default.css';
-import { HomeAdmin } from "./HomeAdmin";
-import { HomeCliente } from "./HomeCliente";
 
 export function Default() {
   const navigate = useNavigate();
@@ -23,7 +21,7 @@ export function Default() {
     navigate('/dashboard/');
   else
     navigate('/paginaInicial');
-  }, [admin]); // Array de dependências vazio
+  }, [admin]);
 
   return (
     <div className="layout">
