@@ -26,10 +26,17 @@ export function SignUp() {
                 />
 
                 <Input 
+                    id="endereco"
+                    type="text"
+                    label="Endereco"
+                    placeholder="Ex: Rua 2, Diamantina"
+                />
+
+                <Input 
                     id="password"
                     type="password"
                     label="Senha"
-                    placeholder="Não escreva 123"
+                    placeholder="Digite sua senha"
                 />
 
                 <div className="div-buttons div-column">

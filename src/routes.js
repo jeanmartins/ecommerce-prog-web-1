@@ -4,6 +4,8 @@ import { Login } from './pages/Login';
 import { SignUp } from './pages/SignUp';
 import { Profile } from './pages/Profile';
 import { HomeAdmin } from './pages/HomeAdmin';
+import { Carrinho } from './pages/Carrinho';
+import { FinalizarCompra } from './pages/FinalizarCompra';
 
 export const router = createBrowserRouter([
     {
@@ -20,7 +22,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/carrinho',
-                element: <>carrinho</>
+                element: <Carrinho />
+            },
+            {
+                path: '/finalizarCompra',
+                element: <FinalizarCompra />
             },
             {
                 path: '/profile/:idUser',
