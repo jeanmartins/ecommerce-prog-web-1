@@ -31,10 +31,11 @@ export function HomeAdmin() {
       const [addCategoriaForm, setAddCategoriaForm] = useState({
         descricao: '',
       });
+    const [meusPedidos, setMeusPedidos] = useState([]);
 
     const handleSetProdutos = () => setStatus("produtos");
     const handleSetCategorias = () => setStatus("categorias");
-
+    const handleSetPedidos = () => setStatus("pedidos");
 
     const handleSetAddProduto = () => setStatus("addProduto");
     const handleSetAddCategoria = () => setStatus("addCategoria");
@@ -218,9 +219,43 @@ export function HomeAdmin() {
     }
 
 
+    const getMeusPedidos = () => setMeusPedidos([
+        {
+            num_pedido: '12345678',
+            status: 'Entregue',
+            cliente: '1476890',
+            img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
+            nome: "Ração Golden Fórmula Mini Bits para Cães Adultos de Porte Pequeno Sabor Frango e Arroz",
+            quantidade: 1,
+            preco: "149,90",
+            categorias: ["cachorro", "ração"],
+        },
+        {
+            num_pedido: '12345678',
+            status: 'Entregue',
+            cliente: '1476890',
+            img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
+            nome: "Ração Golden Fórmula Mini Bits para Cães Adultos de Porte Pequeno Sabor Frango e Arroz",
+            quantidade: 1,
+            preco: "149,90",
+            categorias: ["cachorro", "ração"],
+        },
+        {
+            num_pedido: '12345678',
+            status: 'Entregue',
+            cliente: '1476890',
+            img: "https://cobasi.vteximg.com.br/arquivos/ids/939212/racao-golden-formula-caes-adultos-racas-pequenas-frango-arroz-mini-bits-3626279-1kg.jpg?v=638127640641870000",
+            nome: "Ração Golden Fórmula Mini Bits para Cães Adultos de Porte Pequeno Sabor Frango e Arroz",
+            quantidade: 1,
+            preco: "149,90",
+            categorias: ["cachorro", "ração"],
+        },
+    ]);
+
     useEffect(() => {
         getMeusProdutos();
         getMinhasCategorias();
+        getMeusPedidos();
     }, []);
 
     return (
@@ -248,7 +283,13 @@ export function HomeAdmin() {
                         Categorias
                     </button>
 
-
+                    <button 
+                        className="item-menu"
+                        id={status === "pedidos" ? "selected" : null}
+                        onClick={handleSetPedidos}
+                    >
+                        Pedidos dos clientes
+                    </button>
                 </div>
 
                 {status === "produtos" && 
@@ -531,6 +572,51 @@ export function HomeAdmin() {
                         </button>
                     </div>
                 } 
+
+                {status === "pedidos" &&
+                    <div className="lista-produto div-column">
+                        {meusPedidos.map(produto => (
+                            <div className="item-pedido"> 
+                                <div className="infos-pedido">
+                                    <span className="num">PEDIDO Nº {produto.num_pedido}</span>
+                                    <span className="status">{produto.status}</span>
+                                </div>
+
+                                <div className="item-produto pedido">
+                                    <div className="infos-produto">
+                                        <img src={produto.img} alt="Imagem produto"/>
+
+                                        <div className="dados">
+                                            <div className="categorias">
+                                                {produto.categorias.map((categoria) => 
+                                                    <span className="tag">{categoria}</span>
+                                                )}
+                                            </div>
+                                            
+                                            <label>{produto.nome}</label>
+
+                                            <div>
+                                                <span className="estoque">{produto.quantidade} unidade</span>
+                                                <span className="preco"> | Total = R${produto.preco} | Pedido feito por </span>
+                                                <span className="preco cliente">ID {produto.cliente}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="acoes">
+                                        <button 
+                                            className="secondary"
+                                            id="cta"
+                                            onClick={handleSetEditProduto}
+                                        >
+                                            Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                }
             </section>
         </section>
     );
