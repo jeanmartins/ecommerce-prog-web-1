@@ -22,7 +22,7 @@ export function SignUp() {
         e.preventDefault();
 
         try {
-            const response = await api.post(`/ap1/v1/user/create`,{
+            const response = await api.post(`/api/v1/user/create`,{
                 nome: nome,
                 endereco: endereco,
                 email: email,
