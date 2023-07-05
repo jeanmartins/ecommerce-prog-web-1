@@ -227,6 +227,16 @@
     width: 597px;
 }
 
+.selectCategoria {
+    background: var(--white);
+    color: var(--black-purple);
+    border: 1px solid var(--gray-4);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    width: 597px;
+}
+
 .add .btn-secondary {
     padding: 16px 12px;
     width: 288px;
