@@ -94,7 +94,15 @@
     gap: 12px;
 }
 
-
+.carrinhoAdd{
+    background: var(--yellow);
+    color: var(--black-purple);
+    font-weight: 500;
+    border: 0;
+    border-radius: 8px;
+    height: 42px;
+    width: 108px;
+}
 
 .cliente-produto .item-produto label {
     color: var(--gray-1);

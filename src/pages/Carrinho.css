@@ -215,8 +215,12 @@
 
     width: 100%;
 }
+.resumo-pedido .btn-finalizar[disabled] {
+    background: #a9a9a9; /* Altere para a cor cinza desejada */
+    color: var(--white); /* Altere para a cor de texto desejada */
+    cursor: not-allowed;
+  }
 
-.resumo-pedido .btn-finalizar:hover {
-    background: var(--yellow-hover);
-    cursor: pointer;
-}
+  .resumo-pedido .btn-finalizar:not([disabled]):hover {
+    background: var(--yellow-hover); /* Altere para a cor de hover desejada */
+  }
