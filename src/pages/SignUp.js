@@ -99,17 +99,11 @@ export function SignUp() {
                 />
 
                 <Input 
-                    id="endereco"
-                    type="text"
-                    label="Endereco"
-                    placeholder="Ex: Rua 2, Diamantina"
-                />
-
-                <Input 
                     id="password"
                     type="password"
                     label="Senha"
                     placeholder="Digite sua senha"
+                    onChange={(e) => setSenha(e.target.value)}
                 />
 
                 <div className="div-buttons div-column">

@@ -17,13 +17,15 @@ export function HomeAdmin() {
         descricao: '',
         preco: 0,
         quantidade: 0,
-        categoriaId: 0
+        categoriaId: 0,
+        foto:""
       });
       const [addProdutoForm, setAddProdutoForm] = useState({
         descricao: '',
         preco: 0,
         quantidade: 0,
-        categoriaId: 0
+        categoriaId: 0,
+        foto: ""
       });
       const [editCategoriaForm, setEditCategoriaForm] = useState({
         id : 0,
@@ -131,6 +133,32 @@ export function HomeAdmin() {
         }));
       };
 
+      const handleEditProdutoFormFileChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        const { name, value } = e.target;
+        reader.onloadend = () => {
+            setEditProdutoForm(prevState => ({
+                ...prevState,
+                [name]: reader.result
+              }));
+        };
+        reader.readAsDataURL(file);
+      };
+
+      const handleAddProdutoFormFileChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setAddProdutoForm((prevState) => ({
+            ...prevState,
+            foto: reader.result // Armazena a imagem convertida em base64
+          }));
+        };
+        reader.readAsDataURL(file);
+      };
+      
+
       const handleAddProdutoFormChange = (e) => {
         const { name, value } = e.target;
         setAddProdutoForm(prevState => ({
@@ -206,6 +234,8 @@ export function HomeAdmin() {
           console.error('Erro ao adicionar uma categoria:', error);
         }
       };
+
+   
       
       
       const handleEditCategoriaSubmit = async () => {
@@ -420,6 +450,14 @@ export function HomeAdmin() {
                                     onChange={handleEditProdutoFormChange}
                                 />                  
                             </div>
+
+                                <Input
+                                    type="file"
+                                    name="foto"
+                                    label="Foto"
+                                    accept="image/*"
+                                    onChange={handleEditProdutoFormFileChange}
+                                />
              
                              <select
                                 id="categorias"
@@ -519,7 +557,14 @@ export function HomeAdmin() {
                                     onChange={handleAddProdutoFormChange}
                                 />                  
                             </div>
-
+                                <Input
+                                    type="file"
+                                    name="foto"
+                                    label="Foto"
+                                    accept="image/*"
+                                    required
+                                    onChange={handleAddProdutoFormFileChange}
+                                />
                             <select
                                 id="categorias"
                                 className="selectCategoria"
