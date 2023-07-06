@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 import trash from '../assets/lixo.svg';
 import minus from '../assets/minus.svg';
 import plus from '../assets/plus.svg';
@@ -8,8 +8,15 @@ import plus from '../assets/plus.svg';
 import './Carrinho.css';
 
 export function Carrinho() {
+  const navigate = useNavigate();
   const [meusProdutos, setMeusProdutos] = useState([]);
   const [totalPedido, setTotalPedido] = useState(0);
+  const isAutenticated =  sessionStorage.getItem('jwt') !== null;
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+
 
   const getMeusProdutos = () => {
     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || {};
@@ -76,18 +83,67 @@ export function Carrinho() {
     });
   };
 
+  const handleSubmitCompra = async() => {
+    if(!isAutenticated) {
+      setErrorMessage("Faça login para finalizar a compra");
+            setTimeout(() => {
+                setErrorMessage("");
+                navigate('/login');
+                }, 2000);  
+
+    }
+    let produtos = meusProdutos.map((produto) => {
+      return {
+        "idProduto": produto.id,
+        "quantidade": produto.quantidade
+      }
+    })
+    const response = await api.post(`/api/v1/user/insertUserSales`, {
+      produtos: produtos,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if(response.data){
+      setSuccessMessage("Compra feita com sucesso!");
+      setTimeout(() => {
+          localStorage.clear();
+          navigate('/paginaInicial');
+          window.location.reload();
+          setSuccessMessage("");
+          }, 2000);  
+    }else{
+      setErrorMessage("Ocorreu um erro ao finalizar a compra");
+            setTimeout(() => {
+                setErrorMessage("");
+                }, 2000);  
+    }
+    
+  }
+
+
   useEffect(() => {
     getMeusProdutos();
   }, []);
 
   const isCarrinhoVazio = meusProdutos.length === 0;
-  const isAutenticated =  sessionStorage.getItem('jwt') !== null;
 
   return (
+    
     <section className="section-carrinho div-column">
       <div className="div-row">
         <h1>Carrinho de compras</h1>
       </div>
+      {successMessage && (
+      <div className="alert alert-success mt-3 text-center fixed-top" role="alert">
+      {successMessage}
+      </div>
+      )}
+      {errorMessage && (
+          <div className="alert alert-danger mt-3 text-center fixed-top" role="alert">
+          {errorMessage}
+          </div>
+        )}
 
       <div className="section-content">
         <div className="info-pedido div-column">
@@ -175,6 +231,7 @@ export function Carrinho() {
             className="btn-finalizar"
             to="/finalizarCompra"
             disabled={isCarrinhoVazio || !isAutenticated}
+            onClick={() => handleSubmitCompra()}
             title={
                 isCarrinhoVazio
                   ? 'Seu carrinho está vazio'
