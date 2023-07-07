@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Input } from "../components/Input";
+
 import api from "../services/api";
+
+import { Input } from "../components/Input";
+
 import './LoginSignUp.css';
 import "bootstrap/dist/css/bootstrap.min.css"; // Importa o arquivo CSS do Bootstrap
 
@@ -17,8 +20,9 @@ export function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const response = await api.post(`/ap1/v1/user/create`,{
+            const response = await api.post(`/api/v1/user/create`,{
                 nome: nome,
                 endereco: endereco,
                 email: email,
@@ -36,34 +40,34 @@ export function SignUp() {
                 // Redireciona o usuário para a tela de login
                 navigate("/login");
                 }, 3000);
-            }else{
-
+            } else {
                 setErrorMessage("Ocorreu um erro ao criar a conta.");
                 setTimeout(() => {
                     setErrorMessage("");
-                    }, 3000);
+                }, 3000);
             }
         } catch (error) {
-          setErrorMessage("Ocorreu um erro ao criar a conta.");
-          setTimeout(() => {
-            setErrorMessage("");
+            setErrorMessage("Ocorreu um erro ao criar a conta.");
+            setTimeout(() => {
+                setErrorMessage("");
             }, 3000);
-          console.error("Error on create:", error.response.errorMessage);
+            console.error("Error on create:", error.response.errorMessage);
         }
     };
 
     return (
         <section className="section-form div-column">
-                        {successMessage && (
+            {successMessage && (
                 <div className="alert alert-success mt-3 text-center" role="alert">
-                {successMessage}
+                    {successMessage}
                 </div>
             )}
             {errorMessage && (
                 <div className="alert alert-danger mt-3 text-center" role="alert">
-                {errorMessage}
+                    {errorMessage}
                 </div>
             )}
+
             <form onSubmit={handleSubmit}>
                 <h1>Crie sua conta</h1>
 
@@ -98,8 +102,7 @@ export function SignUp() {
                     id="password"
                     type="password"
                     label="Senha"
-                    placeholder="Não escreva 123"
-                    value={senha}
+                    placeholder="Digite sua senha"
                     onChange={(e) => setSenha(e.target.value)}
                 />
 
@@ -108,7 +111,6 @@ export function SignUp() {
                     <Link to="/login">Já tenho conta</Link>
                 </div>
             </form>
-
         </section>
     );
 }
